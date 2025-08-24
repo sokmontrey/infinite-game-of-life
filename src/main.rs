@@ -1,5 +1,4 @@
 use std::collections::{HashMap, HashSet};
-use std::net::IpAddr::V4;
 use raylib::prelude::*;
 use glam::IVec2;
 use itertools::Itertools;
