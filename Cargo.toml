@@ -1,0 +1,9 @@
+[package]
+name = "rust-game-of-life"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+raylib = { version = "5.5.1", features = [] }
+glam = "0.30.5"
+itertools = "0.14.0"
