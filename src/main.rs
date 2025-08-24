@@ -90,12 +90,15 @@ fn main() {
 
         // UI
 
-        d.draw_text(&format!("FPS: {}", fps), 10, 10, 20, Color::GRAY);
-        d.draw_text(&format!("Cells: {}", cells.len()), 10, 30, 20, Color::GRAY);
+        d.draw_text(&"Space: Play/Pause, C: Clear".to_string(), 10, 10, 20, Color::GRAY);
+        d.draw_text(&"Left Mouse (Click): Toggle Cell, Left Mouse (Drag): Pan".to_string(), 10, 40, 20, Color::GRAY);
+        d.draw_text(&"Mouse Wheel: Zoom".to_string(), 10, 70, 20, Color::GRAY);
+        d.draw_text(&format!("FPS: {}", fps), 10, 100, 20, Color::GRAY);
+        d.draw_text(&format!("Cells: {}", cells.len()), 10, 130, 20, Color::GRAY);
         d.draw_text(
             &format!("{}", if is_running { "Running" } else { "Paused" }),
             10,
-            50,
+            160,
             20,
             if is_running { Color::GREEN } else { Color::GRAY },
         );
@@ -134,24 +137,6 @@ fn main() {
             is_running = !is_running;
         } else if d.is_key_pressed(KeyboardKey::KEY_C) {
             cells.clear();
-        }
-
-        // Wheel input handling
-
-        let wheel_move = d.get_mouse_wheel_move();
-        if wheel_move.abs() > 0.0 {
-            let zoom_factor = 1.1f32.powf(wheel_move);
-            let new_cell_size = ((cell_size as f32 * zoom_factor).round() as i32).clamp(2, 100);
-            if new_cell_size != cell_size {
-                let mouse_pos = IVec2::new(
-                    d.get_mouse_position().x as i32,
-                    d.get_mouse_position().y as i32,
-                );
-                let world_before = (mouse_pos / cell_size) - origin;
-                let world_after = (mouse_pos / new_cell_size) - origin;
-                origin += world_before - world_after;
-                cell_size = new_cell_size;
-            }
         }
 
         // Simulation Logic
