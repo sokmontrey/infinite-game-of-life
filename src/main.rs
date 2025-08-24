@@ -64,13 +64,15 @@ fn main() {
 
         // Board rendering
 
-        for x in 0..=dimensions.x {
-            let sx = x * cell_size;
-            d.draw_line(sx, 0, sx, screen_height, Color::LIGHTGRAY);
-        }
-        for y in 0..=dimensions.y {
-            let sy = y * cell_size;
-            d.draw_line(0, sy, screen_width, sy, Color::LIGHTGRAY);
+        if cell_size > 5 {
+            for x in 0..=dimensions.x {
+                let sx = x * cell_size;
+                d.draw_line(sx, 0, sx, screen_height, Color::LIGHTGRAY);
+            }
+            for y in 0..=dimensions.y {
+                let sy = y * cell_size;
+                d.draw_line(0, sy, screen_width, sy, Color::LIGHTGRAY);
+            }
         }
 
         let hovered_cell = IVec2::new(
