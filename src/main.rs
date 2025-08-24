@@ -74,13 +74,17 @@ fn main() {
         }
 
         let hovered_cell = IVec2::new(
-            ((current_mouse_pos.x - origin.x) as f32 / cell_size as f32).floor() as i32,
-            ((current_mouse_pos.y - origin.y) as f32 / cell_size as f32).floor() as i32,
+            ((current_mouse_pos.x as f32) / cell_size as f32).floor() as i32 - origin.x,
+            ((current_mouse_pos.y as f32) / cell_size as f32).floor() as i32 - origin.y,
+        );
+        let hovered_screen_pos = IVec2::new(
+            (hovered_cell.x + origin.x) * cell_size,
+            (hovered_cell.y + origin.y) * cell_size,
         );
         d.draw_rectangle_lines_ex(
             Rectangle::new(
-                origin.x as f32 + (hovered_cell.x * cell_size) as f32,
-                origin.y as f32 + (hovered_cell.y * cell_size) as f32,
+                hovered_screen_pos.x as f32,
+                hovered_screen_pos.y as f32,
                 cell_size as f32,
                 cell_size as f32,
             ),
@@ -137,6 +141,27 @@ fn main() {
             is_running = !is_running;
         } else if d.is_key_pressed(KeyboardKey::KEY_C) {
             cells.clear();
+        }
+
+        // Wheel input handling
+
+        let wheel = d.get_mouse_wheel_move();
+        if wheel != 0.0 {
+            let old_cell_size = cell_size;
+
+            if wheel > 0.0 {
+                cell_size = (cell_size as f32 * 1.1).ceil() as i32;
+            } else {
+                cell_size = (cell_size as f32 * 0.9).floor() as i32;
+            }
+            cell_size = cell_size.clamp(2, 100);
+
+            if cell_size != old_cell_size {
+                let world_under_mouse = origin + current_mouse_pos / old_cell_size;
+                let new_screen_pos = (world_under_mouse - origin) * cell_size;
+
+                origin += (current_mouse_pos - new_screen_pos) / cell_size;
+            }
         }
 
         // Simulation Logic
